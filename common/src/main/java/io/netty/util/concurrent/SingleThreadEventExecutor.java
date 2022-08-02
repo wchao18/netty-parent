@@ -499,6 +499,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     @Override
     public boolean inEventLoop(Thread thread) {
+        //开始 this.thread-> null
         return thread == this.thread;
     }
 
@@ -923,6 +924,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
                 boolean success = false;
                 updateLastExecutionTime();
                 try {
+                    //核心方法
                     SingleThreadEventExecutor.this.run();
                     success = true;
                 } catch (Throwable t) {

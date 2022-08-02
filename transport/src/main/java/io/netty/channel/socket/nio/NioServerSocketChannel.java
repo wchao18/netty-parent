@@ -72,7 +72,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
      * 反射创建NioServerSocketChannel调用
      */
     public NioServerSocketChannel() {
-        //newSocket(DEFAULT_SELECTOR_PROVIDER)返回 ServerSocketChannel
+        //newSocket(DEFAULT_SELECTOR_PROVIDER)返回 ServerSocketChannel（JDK底层的）
         this(newSocket(DEFAULT_SELECTOR_PROVIDER));
     }
 

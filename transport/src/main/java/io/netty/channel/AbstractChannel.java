@@ -68,7 +68,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
      *        the parent of this channel. {@code null} if there's no parent.
      */
     protected AbstractChannel(Channel parent) {
-        //new ServerSocketChannel
+        //parent -> null
         this.parent = parent;
         id = newId();
         unsafe = newUnsafe();
@@ -470,6 +470,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             //eventLoop=SingleThreadEventLoop
 
             //this.eventLoop=NioEventLoop==>SingleThreadEventLoop.this
+            //每个channel绑定唯一的eventLoop线程
             AbstractChannel.this.eventLoop = eventLoop;
 
             //他们最终都调用了register0   eventLoop.inEventLoop()的作用？
@@ -505,6 +506,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
+
                 //调用NioServerSocketChannel 通过反射创建出来nio底层channel的register方法  选择器看不同操作系统
                 doRegister();
                 neverRegistered = false;
@@ -561,9 +563,10 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                         "is not bound to a wildcard address; binding to a non-wildcard " +
                         "address (" + localAddress + ") anyway as requested.");
             }
-
+            //端口绑定之前不是active, 返回false
             boolean wasActive = isActive();
             try {
+                //JDK底层的端口绑定
                 doBind(localAddress);
             } catch (Throwable t) {
                 safeSetFailure(promise, t);
@@ -576,6 +579,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        //PS:核心方法
                         pipeline.fireChannelActive();
                     }
                 });

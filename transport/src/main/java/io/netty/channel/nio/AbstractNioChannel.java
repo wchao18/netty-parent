@@ -50,7 +50,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
     private static final InternalLogger logger =
             InternalLoggerFactory.getInstance(AbstractNioChannel.class);
 
-    //serverSocketChannel
+    //jdk nio serverSocketChannel
     private final SelectableChannel ch;
     //SelectionKey.OP_ACCEPT
     protected final int readInterestOp;
@@ -385,7 +385,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
     @Override
     protected void doRegister() throws Exception {
         boolean selected = false;
-        for (;;) {
+        for (; ; ) {
             try {
                 //javaChannel()   ==>  ServerSocketChannel 通过反射创建出来nio底层channel
                 //调用Nio底层将ServerSocketChannel注册到selector上
@@ -420,7 +420,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         }
 
         readPending = true;
-
+        //0
         final int interestOps = selectionKey.interestOps();
         if ((interestOps & readInterestOp) == 0) {
             selectionKey.interestOps(interestOps | readInterestOp);

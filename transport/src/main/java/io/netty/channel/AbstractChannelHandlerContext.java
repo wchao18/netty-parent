@@ -100,7 +100,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
                                   String name, Class<? extends ChannelHandler> handlerClass) {
         //pipeline=DefaultChannelPipeline
         //executor=null
-        //name =没传系统默认创建
+        //name =没传系统默认创建,DefaultChannelPipeline$TailContext#0
         //handler=TailContext.class
         this.name = ObjectUtil.checkNotNull(name, "name");
         this.pipeline = pipeline;

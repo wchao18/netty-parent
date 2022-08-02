@@ -617,6 +617,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     private static void checkMultiplicity(ChannelHandler handler) {
         if (handler instanceof ChannelHandlerAdapter) {
             ChannelHandlerAdapter h = (ChannelHandlerAdapter) handler;
+            //代表如果不是共享的handler, 并且是未添加状态, 则抛出异常:
             if (!h.isSharable() && h.added) {
                 throw new ChannelPipelineException(
                         h.getClass().getName() +
@@ -1265,9 +1266,11 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         TailContext(DefaultChannelPipeline pipeline) {
             super(pipeline, null, TAIL_NAME, TailContext.class);
+            //将当前节点设置为已添加, head和tail.....
             setAddComplete();
         }
 
+        //自身也是handler
         @Override
         public ChannelHandler handler() {
             return this;
